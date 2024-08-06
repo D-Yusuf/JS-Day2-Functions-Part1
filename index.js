@@ -42,41 +42,44 @@ function printMax(num1, num2){
 printMax(10, 90)
 // task 4
 taskSeperator(4)
-function getLanguageGreeting(){
+async function getLanguageGreeting(name){
     const languageGreetings = {
         en: "Hello",
         es: "Hola",
         fr: "Bonjour",
         tr: "Merhaba",
-        ar: "مرحبا",
     }
     let greeting = ""
-    const question = "What language do you speak? (Ex: en, tr): ";
+
     const languageQuestion = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
-    while (!greeting){
-        languageQuestion.question(question, (lang)=>{
-            if(!languageGreetings[lang]){
-                console.error("Input a valid language. Ex: en, tr, ar")
-                return 0
-                languageQuestion.close()
-            }else{
-                greet = languageGreetings[lang]
-                languageQuestion.close()
-            }
-        })
+    languageQuestion.setPrompt("Input language. Ex: en, tr, es: ")
+    languageQuestion.prompt()
 
-    }
+    languageQuestion.on('line', async(lang)=>{
+        if(languageGreetings[lang]){
+            greeting = await languageGreetings[lang]
+            console.log(`${greeting} ${name}`)
+            languageQuestion.close()
+        }else{
+            console.error(`"${lang}" is not a valid language...`)
+            languageQuestion.prompt()
+        }
+    })
+        
+
+
+   
 }
 function printHello(name){
-        let greeting = getLanguageGreeting()
-        console.log(`${greeting} ${name}`)
-    
-        // let greet =  languageGreetings[language] || console.error("Input a valid language. Ex: en, tr, ar"); 
-     
+    let greeting = getLanguageGreeting()
+
+    // let greet =  languageGreetings[language] || console.error("Input a valid language. Ex: en, tr, ar"); 
+
     
 
 }
-printHello("Yusuf")
+// printHello("Yusuf")
+getLanguageGreeting("Yusuf")
